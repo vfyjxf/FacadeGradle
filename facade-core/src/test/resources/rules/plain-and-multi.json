@@ -1,0 +1,9 @@
+{
+  "com/example/PlainTarget": "com/example/ISomething",
+  "com/example/MultiTarget": ["com/example/IA", "com/example/IB"],
+  "com/MyTarget": "com/InjectedGeneric<T, MyTarget>",
+  "ExampleClass": ["com/example/I1$Inner", "com/example/I1$Inner$SubInner"],
+  "com/example/WildTarget": "com/example/HasWild<? extends java.util.Number, ? super java.lang.String, ?>",
+  "com/example/NestedTarget": "com/example/F2<java.util.List<T>, java.util.Map$Entry<java.lang.String, T>>",
+  "com/example/SlashedArgTarget": "com/example/Fn<com/example/Other, T>"
+}

@@ -1,0 +1,4 @@
+{
+  "com/example/lib/Target": ["com/example/lib/api/MyInterface"],
+  "com/example/lib/GenTarget": ["java/util/function/Supplier<T>"]
+}

@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'dev.vfyjxf.facade'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    // The library is consumed from the repository that :library:publish writes to.
+    maven {
+        name = 'ExampleRepo'
+        url = uri("${rootDir}/build/local-repo")
+    }
+    // JST (used by patchFacadeSources) resolves from Maven Central.
+    mavenCentral()
+}
+
+dependencies {
+    implementation('com.example:example-library:1.0.0') {
+        facade.configure(it) {
+            config.set(layout.projectDirectory.file('facade.json'))
+        }
+    }
+}
+
+application {
+    mainClass = 'com.example.app.Main'
+}
+
+// The local-repo must exist before anything resolves against it: order the publish task
+// ahead of compilation rather than relying on runExample's own dependency list.
+tasks.named('compileJava') {
+    dependsOn ':library:publish'
+}
+
+tasks.register('runExample') {
+    group = 'example'
+    description = 'Publishes the library to build/local-repo, then compiles and runs the app with facade injection.'
+    dependsOn ':library:publish', tasks.named('run')
+}

@@ -1,0 +1,4 @@
+{
+  "com/A" :  "com.B< T >" ,
+  "com/C" : [ "com/D" , "com.E<F,G>" ]
+}
