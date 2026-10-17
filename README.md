@@ -54,9 +54,22 @@ A Gradle plugin (`dev.vfyjxf.facade`) plus a small core library (`facade-core`) 
 ## Quickstart
 
 The plugin is `dev.vfyjxf.facade` (`dev.vfyjxf.gradle:facade-gradle`, version `0.1.0`).
-Two ways to consume it — pick one:
+Three ways to consume it — pick one:
 
-**A. From a locally published artifact (mavenLocal).** Publish once from this repository (see
+**A. From the Gradle Plugin Portal (recommended).** Published as version `0.1.0`;
+`gradlePluginPortal()` is in `pluginManagement` by default:
+
+```kotlin
+// build.gradle.kts
+plugins {
+    java
+    id("dev.vfyjxf.facade") version "0.1.0"
+}
+```
+
+The rest of the `build.gradle.kts` is identical to the mavenLocal variant below.
+
+**B. From a locally published artifact (mavenLocal).** Publish once from this repository (see
 [Publishing](#publishing)):
 
 ```console
@@ -90,7 +103,7 @@ dependencies {
 }
 ```
 
-**B. From a checkout of this repository (composite build, nothing published).**
+**C. From a checkout of this repository (composite build, nothing published).**
 
 ```kotlin
 // settings.gradle.kts
@@ -300,25 +313,25 @@ if a task is considered up-to-date but the artifacts look stale).
 
 #### GitHub
 
-The repository is layout-ready for a public GitHub repository: `LICENSE` (Apache-2.0), `README.md`,
-`.gitignore` (build outputs, `.gradle/`, IDE files), a Gradle wrapper, and
-[`.github/workflows/build.yml`](.github/workflows/build.yml) (Temurin 21, `./gradlew build
---warning-mode all`; the cross-version TestKit suite is deliberately manual — it downloads three
-Gradle distributions). Creating the remote and pushing is left to you; the URL that publishing
-metadata points at is `https://github.com/vfyjxf/FacadeGradle` (`repositoryUrl` in
-`facade-gradle/build.gradle.kts`) — **adjust it if the repository ends up elsewhere**.
+Published at **https://github.com/vfyjxf/FacadeGradle** (public, Apache-2.0). The publishing
+metadata (`repositoryUrl` in `facade-gradle/build.gradle.kts`, POM `url`/`scm`) points there —
+adjust both if the repository moves. No CI workflow is included yet (the first push used a `gh`
+token without the `workflow` scope); add one from the GitHub web UI if desired
+(`./gradlew build --warning-mode all` on Temurin 21; the cross-version TestKit suite is
+deliberately manual — it downloads three Gradle distributions).
 
 #### Gradle Plugin Portal
 
-**CONFIGURED BUT NOT YET PUBLISHED.** `com.gradle.plugin-publish` is applied, `gradlePlugin`
-carries the Portal-required `website`/`vcsUrl` (`https://github.com/vfyjxf/FacadeGradle`),
-`displayName`, `description` and `tags`, the POMs carry `url`/`scm`/`licenses`/`developers`, and
-release versions are non-SNAPSHOT. Publishing itself needs Portal credentials and an owned
-namespace:
+**Published:** version **0.1.0** — see
+[plugins.gradle.org/plugin/dev.vfyjxf.facade](https://plugins.gradle.org/plugin/dev.vfyjxf.facade).
+The plugin jar is self-contained (facade-core, gson and ASM are shadow-embedded and relocated),
+so the published POM has no dependencies and consumers need nothing beyond the Portal.
 
-1. Claim the plugin id's namespace (`dev.vfyjxf.facade` → the `vfyjxf.dev` domain) on
-   [plugins.gradle.org](https://plugins.gradle.org/).
-2. Put the API key/secret in `GRADLE_PUBLISH_KEY` / `GRADLE_PUBLISH_SECRET`.
+Releasing a new version:
+
+1. Bump `version` in the root `build.gradle.kts` (the Portal rejects SNAPSHOTs).
+2. Put the API key/secret in `GRADLE_PUBLISH_KEY` / `GRADLE_PUBLISH_SECRET` (or as
+   `gradle.publish.key` / `gradle.publish.secret` in `~/.gradle/gradle.properties`).
 3. Publish:
 
 ```console
